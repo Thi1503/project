@@ -23,11 +23,11 @@ class ToDoList {
   factory ToDoList() {
     return _instance;
   }
-  void updateIDs() {
-    for (int i = 0; i < todos.length; i++) {
-      todos[i].id = i; // Cập nhật ID của ToDoNode
-    }
-  }
+  // void updateIDs() {
+  //   for (int i = 0; i < todos.length; i++) {
+  //     todos[i].id = i; // Cập nhật ID của ToDoNode
+  //   }
+  // }
   ToDoList._internal();
 
   List<ToDo> todos = [
@@ -37,7 +37,7 @@ class ToDoList {
         titleNode: null,
         contentNode: 'Noi dung ghi chu 0'),
     ToDo(
-        id: 1,
+        id: 12,
         imagePath: 'assets/violet.jpg',
         titleNode: 'Tieu de 1',
         contentNode: 'Noi dung ghi chu 1'),

@@ -129,7 +129,7 @@ class _AddScreenState extends State<AddScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                       title: Text('Thêm hình ảnh'),
+                      title: Text('Thêm hình ảnh'),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -161,7 +161,6 @@ class _AddScreenState extends State<AddScreen> {
               ),
             ),
           ),
-
           Expanded(
             flex: 2,
             child: Container(
@@ -180,8 +179,10 @@ class _AddScreenState extends State<AddScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       // title: Text('Thông báo'),
-                      content: Text('Bạn có muốn xoá ghi chú này không ?',
-                      style: TextStyle(fontSize: 20),),
+                      content: Text(
+                        'Bạn có muốn xoá ghi chú này không ?',
+                        style: TextStyle(fontSize: 20),
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -221,5 +222,4 @@ class _AddScreenState extends State<AddScreen> {
     _contentController.dispose();
     super.dispose();
   }
-
 }

@@ -12,15 +12,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  @override
-  void initState() {
-    super.initState();
-    _updateIDs(); // Cập nhật ID trước khi build
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _updateIDs(); // Cập nhật ID trước khi build
+  // }
 
-  void _updateIDs() {
-    ToDoList().updateIDs();
-  }
+  // void _updateIDs() {
+  //   ToDoList().updateIDs();
+  // }
 
   @override
   Widget build(BuildContext context) {
