@@ -10,8 +10,8 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Container(
-        padding: const EdgeInsets.only(right: 10, left: 10),
-        child: const TextField(
+          padding: const EdgeInsets.only(right: 10, left: 10),
+          child: const TextField(
             style: TextStyle(fontSize: 20, color: Colors.black),
             decoration: InputDecoration(
                 border: InputBorder.none,

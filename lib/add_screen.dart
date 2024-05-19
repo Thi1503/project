@@ -6,8 +6,7 @@ import 'home.dart';
 class AddScreen extends StatefulWidget {
   final int id;
   final String? imagePath;
-  const AddScreen({Key? key, required this.id, this.imagePath})
-      : super(key: key);
+  const AddScreen({super.key, required this.id, this.imagePath});
 
   @override
   _AddScreenState createState() => _AddScreenState();
@@ -59,8 +58,8 @@ class _AddScreenState extends State<AddScreen> {
                 TextField(
                   controller: _titleController,
                   maxLines: null,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  decoration: InputDecoration(
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Tiêu đề',
                     hintStyle: TextStyle(
@@ -73,8 +72,8 @@ class _AddScreenState extends State<AddScreen> {
                 TextField(
                   controller: _contentController,
                   maxLines: null,
-                  style: TextStyle(fontSize: 16),
-                  decoration: InputDecoration(
+                  style:  const TextStyle(fontSize: 16),
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Nội dung',
                     hintStyle: TextStyle(

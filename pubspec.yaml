@@ -63,6 +63,7 @@ flutter:
     - assets/anh_doc.jpg
     - assets/goku.jpg
     - assets/naruto.jpg
+    - assets/todolist.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
