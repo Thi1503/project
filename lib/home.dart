@@ -1,4 +1,5 @@
 import 'package:do_an_1/search_screen.dart';
+import 'package:do_an_1/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:do_an_1/add_screen.dart';
 import 'package:do_an_1/todo_node.dart';
@@ -178,7 +179,13 @@ class _HomeState extends State<Home> {
                 color: Colors.black,
               ),
               title: const Text('Đăng xuất'),
-              onTap: () {}),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SignInScreen()),
+                );
+              }),
         ],
       ),
     );
