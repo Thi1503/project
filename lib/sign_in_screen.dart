@@ -1,3 +1,4 @@
+import 'package:do_an_1/sign_out_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
@@ -118,7 +119,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignOtScreen()),
+                              );
+                            },
                             child: const Text(
                               'Đăng ký',
                               style: TextStyle(
@@ -142,6 +149,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         builder: (context) => Home()),
                   );
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Màu nền của button
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
                 child: Text(
                   'Đăng nhập',
                   style: TextStyle(
@@ -149,11 +161,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     color: Colors.black,
                     fontWeight: FontWeight.bold
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Màu nền của button
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  textStyle: TextStyle(fontSize: 18),
                 ),
               ),
             ],
