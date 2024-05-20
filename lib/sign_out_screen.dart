@@ -1,16 +1,22 @@
 import 'package:do_an_1/sign_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:do_an_1/database/database_helper.dart';
+import 'package:do_an_1/database/user.dart';
+import 'package:intl/intl.dart';
 
-import 'home.dart';
-
-class SignOtScreen extends StatefulWidget {
-  const SignOtScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  _SignOtScreenState createState() => _SignOtScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignOtScreenState extends State<SignOtScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isObscure = true;
   bool _isObscure2 = true;
 
@@ -45,7 +51,8 @@ class _SignOtScreenState extends State<SignOtScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _usernameController,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
@@ -74,6 +81,36 @@ class _SignOtScreenState extends State<SignOtScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextField(
+                        controller: _emailController,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 15),
+                          hintText: 'Email',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 5.0,
+                            ),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: TextField(
+                        controller: _passwordController,
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
@@ -113,6 +150,7 @@ class _SignOtScreenState extends State<SignOtScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextField(
+                        controller: _confirmPasswordController,
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
@@ -149,15 +187,38 @@ class _SignOtScreenState extends State<SignOtScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SignInScreen()),
-                  );
+                onPressed: () async {
+                  bool isRegistered = await dbHelper.checkSignUp(_emailController.text);
+                  if (isRegistered) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Email đã được sử dụng')),
+                    );
+                  } else {
+                    if (_passwordController.text == _confirmPasswordController.text) {
+                      // Tạo một đối tượng DateTime từ chuỗi ngày giờ hiện tại
+                      DateTime now = DateTime.now();
+
+                      User user = User(
+                        username: _usernameController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        // Sử dụng đối tượng DateTime đã tạo để gán cho createdAt
+                        createdAt: now,
+                      );
+                      await dbHelper.insertUser(user);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignInScreen()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Mật khẩu không khớp')),
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Màu nền của button
+                  backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   textStyle: TextStyle(fontSize: 18),
                 ),
@@ -170,6 +231,7 @@ class _SignOtScreenState extends State<SignOtScreen> {
                   ),
                 ),
               ),
+
             ],
           ),
         ),

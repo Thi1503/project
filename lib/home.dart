@@ -13,15 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _updateIDs(); // Cập nhật ID trước khi build
-  // }
 
-  // void _updateIDs() {
-  //   ToDoList().updateIDs();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +47,7 @@ class _HomeState extends State<Home> {
             MaterialPageRoute(builder: (context) => SearchScreen()),
           );
         },
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.circular(30),
-        // ),
-        // tileColor: const Color.fromARGB(255, 225, 214, 214),
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Scaffold.of(context).openDrawer();
-        //   },
-        //   icon: const Icon(
-        //     Icons.menu,
-        //     color: Colors.black,
-        //     size: 30,
-        //   ),
-        // ),
+
         title: const Text(
           'Tìm kiếm ghi chú',
           style: TextStyle(fontSize: 16, color: Colors.black),
@@ -124,32 +103,13 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            title: Text(
+            title: const Text(
               'Lê Đình Thi',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
           ),
-          // DrawerHeader(
-          //   decoration: BoxDecoration(
-          //     color: Colors.blue,
-          //   ),
-          //
-          //   child: ListTile(
-          //     leading: CircleAvatar(
-          //       backgroundColor: Colors.transparent,
-          //       child: ClipOval(
-          //         child: Image.asset(
-          //           'assets/violet.jpg',
-          //           fit: BoxFit.cover,
-          //           width: 40,
-          //           height: 40,
-          //         ),
-          //       ),
-          //     ),
-          //   )
-          // ),
           ListTile(
               leading: Icon(
                 Icons.home,

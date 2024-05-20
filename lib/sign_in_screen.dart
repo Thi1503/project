@@ -1,7 +1,8 @@
+import 'package:do_an_1/home.dart';
 import 'package:do_an_1/sign_out_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'home.dart';
+import 'package:do_an_1/database/database_helper.dart';
+import 'package:do_an_1/database/user.dart'; // Thay thế your_app bằng tên gói của bạn
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -11,7 +12,12 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   bool _isObscure = true;
+
+  final DatabaseHelper dbHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -45,24 +51,25 @@ class _SignInScreenState extends State<SignInScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const TextField(
-                        style: TextStyle(
+                      child: TextField(
+                        controller: _emailController,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
                         ),
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
-                          contentPadding: EdgeInsets.symmetric(
+                          prefixIcon: const Icon(Icons.email),
+                          contentPadding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
-                          hintText: 'Tên đăng nhập',
+                          hintText: 'Email',
                           hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.black,
                               width: 5.0,
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
                         ),
                       ),
@@ -74,13 +81,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextField(
+                        controller: _passwordController,
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
                         ),
                         obscureText: _isObscure,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
                           hintText: 'Mật khẩu',
@@ -91,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -123,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignOtScreen()),
+                                    builder: (context) => SignUpScreen()),
                               );
                             },
                             child: const Text(
@@ -142,24 +150,32 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home()),
+                onPressed: () async {
+                  bool isLoggedIn = await dbHelper.checkLogin(
+                    _emailController.text,
+                    _passwordController.text,
                   );
+
+                  if (isLoggedIn) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
+                  } else {
+                    // Xử lý thông báo khi đăng nhập thất bại
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue, // Màu nền của button
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  textStyle: TextStyle(fontSize: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 18),
                 ),
-                child: Text(
+                child: const Text(
                   'Đăng nhập',
                   style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
                   ),
                 ),
               ),

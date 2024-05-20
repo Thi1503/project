@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+
 class ToDo {
   int id;
   String? imagePath;
@@ -32,12 +33,12 @@ class ToDoList {
 
   List<ToDo> todos = [
     ToDo(
-        id: 7,
+        id: 0,
         imagePath: null,
         titleNode: null,
         contentNode: 'Noi dung ghi chu 0'),
     ToDo(
-        id: 12,
+        id: 1,
         imagePath: 'assets/violet.jpg',
         titleNode: 'Tieu de 1',
         contentNode: 'Noi dung ghi chu 1'),
@@ -51,7 +52,8 @@ class ToDoList {
         imagePath: 'assets/naruto.jpg',
         titleNode: 'Tieu de 3',
         contentNode: 'Noi dung ghi chu 3'),
-    ToDo(id: 100,
+    ToDo(
+        id: 4,
         imagePath: 'assets/goku.jpg',
         titleNode: '',
         contentNode: '')
