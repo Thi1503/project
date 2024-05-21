@@ -1,19 +1,21 @@
-import 'package:do_an_1/search_screen.dart';
-import 'package:do_an_1/sign_in_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:do_an_1/add_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:do_an_1/todo_node.dart';
-import 'package:do_an_1/todo_list.dart';
+import 'search_screen.dart';
+import 'sign_in_screen.dart'; // Import NotesListScreen
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final int userId;
+  final int? noteId;
+
+  const Home({Key? key, required this.userId,this.noteId}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +23,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
       drawer: _buildDrawer(),
-      body: ListView(
-        padding: const EdgeInsets.all(10),
-        children: ToDoList()
-            .todos
-            .map((todo) => ToDoNode(
-                  id: todo.id,
-                  imagePath: todo.imagePath,
-                  contentNode: todo.contentNode,
-                  titleNode: todo.titleNode,
-                ))
-            .toList(),
-      ),
+      body: NotesListScreen(userId: widget.userId),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
@@ -44,10 +35,9 @@ class _HomeState extends State<Home> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SearchScreen()),
+            MaterialPageRoute(builder: (context) => SearchScreen(userId: widget.userId,)),
           );
         },
-
         title: const Text(
           'Tìm kiếm ghi chú',
           style: TextStyle(fontSize: 16, color: Colors.black),
@@ -72,25 +62,11 @@ class _HomeState extends State<Home> {
   }
 
   Drawer _buildDrawer() {
-    int _selectedIndex = 0;
-    const TextStyle optionStyle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          Container(
-            // color: Colors.blue,
-            padding: EdgeInsets.only(
-                top: 50,
-                left: 20,
-                right: 20,
-                bottom: 20), // Điều chỉnh kích thước của DrawerHeader
-          ),
+          Container(),
           ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.transparent,
@@ -111,18 +87,26 @@ class _HomeState extends State<Home> {
             ),
           ),
           ListTile(
-              leading: Icon(
-                Icons.home,
-                color: Colors.black,
-              ),
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {}),
+            leading: Icon(
+              Icons.home,
+              color: Colors.black,
+            ),
+            title: const Text('Home'),
+            selected: _selectedIndex == 0,
+            onTap: () {
+              Navigator.pop(context); // Close drawer
+            },
+          ),
           ListTile(
             leading: Icon(Icons.add, color: Colors.black),
             title: const Text('Tạo ghi chú'),
             selected: _selectedIndex == 1,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddScreen(userId: widget.userId)),
+              );
+            },
           ),
           ListTile(
             leading: Icon(
@@ -131,21 +115,23 @@ class _HomeState extends State<Home> {
             ),
             title: const Text('Cài đặt'),
             selected: _selectedIndex == 2,
-            onTap: () {},
+            onTap: () {
+              // Handle settings
+            },
           ),
           ListTile(
-              leading: Icon(
-                Icons.logout,
-                color: Colors.black,
-              ),
-              title: const Text('Đăng xuất'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SignInScreen()),
-                );
-              }),
+            leading: Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
+            title: const Text('Đăng xuất'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInScreen()),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -197,16 +183,14 @@ class _HomeState extends State<Home> {
                                 leading: Icon(Icons.camera_alt_outlined),
                                 title: Text('Chụp ảnh'),
                                 onTap: () {
-                                  // Xử lý khi người dùng chọn chụp ảnh
-                                  // Thêm mã xử lý ở đây
+                                  // Handle camera option
                                 },
                               ),
                               ListTile(
                                 leading: Icon(Icons.image_outlined),
                                 title: Text('Chọn từ thư viện'),
                                 onTap: () {
-                                  // Xử lý khi người dùng chọn ảnh từ thư viện
-                                  // Thêm mã xử lý ở đây
+                                  // Handle gallery option
                                 },
                               ),
                             ],
@@ -228,9 +212,7 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          AddScreen(id: ToDoList().todos.length)),
+                  MaterialPageRoute(builder: (context) => AddScreen(userId: widget.userId)),
                 );
               },
               shape: RoundedRectangleBorder(

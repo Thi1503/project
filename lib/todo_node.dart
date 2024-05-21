@@ -1,110 +1,157 @@
-import 'package:do_an_1/todo_list.dart';
+import 'package:do_an_1/add_screen.dart';
+import 'package:do_an_1/database/database_helper.dart';
 import 'package:flutter/material.dart';
 
-import 'add_screen.dart';
+class NotesListScreen extends StatefulWidget {
+  final int userId;
+  final String? searchKeyword;
 
-class ToDoNode extends StatefulWidget {
-  final int id;
-  final String? imagePath;
-  final String? contentNode;
-  final String? titleNode;
-
-  const ToDoNode(
-      {Key? key,
-      required this.id,
-      this.imagePath,
-      this.contentNode,
-      this.titleNode})
-      : super(key: key);
+  const NotesListScreen({Key? key, required this.userId, this.searchKeyword}) : super(key: key);
 
   @override
-  _ToDoNodeState createState() => _ToDoNodeState();
+  _NotesListScreenState createState() => _NotesListScreenState();
 }
 
-class _ToDoNodeState extends State<ToDoNode> {
-  MaterialColor _borderColor = Colors.grey;
-  double _borderWidth = 1.0;
+class _NotesListScreenState extends State<NotesListScreen> {
+  late Future<List<Map<String, dynamic>>> _notesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    refreshNotes(); // Gọi hàm refreshNotes khi trang được khởi tạo
+  }
+
+  // Phương thức để cập nhật danh sách ghi chú
+  void refreshNotes() {
+    setState(() {
+      _notesFuture = DatabaseHelper().getNotesByUserId(widget.userId, keyword: widget.searchKeyword);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return _gestureDetector();
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('Notes'),
+      // ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _notesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('Không có ghi chú nào'));
+          } else {
+            final notes = snapshot.data!;
+            return ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                final note = notes[index];
+                return NoteWidget(
+                  noteId: note['note_id'],
+                  userId: note['user_id'],
+                  title: note['title'],
+                  content: note['content'],
+                  imagePath: note['imagePath'],
+                  isDone: note['is_done'] == 1,
+                  isDeleted: note['is_deleted'] == 1,
+                  createdAt: DateTime.parse(note['created_at']),
+                  updatedAt: DateTime.parse(note['updated_at']),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
   }
+}
 
-  GestureDetector _gestureDetector() {
+class NoteWidget extends StatelessWidget {
+  final int? noteId;
+  final int userId;
+  final String title;
+  final String content;
+  final String? imagePath;
+  final bool isDone;
+  final bool isDeleted;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
+  const NoteWidget({
+    Key? key,
+    this.noteId,
+    required this.userId,
+    required this.title,
+    required this.content,
+    this.imagePath,
+    this.isDone = false,
+    this.isDeleted = false,
+    this.createdAt,
+    this.updatedAt,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        setState(() {
-          _borderColor = Colors.blue;
-          _borderWidth = 5;
-        });
+        //
       },
       onTap: () {
-
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) {
-              if (widget.id < ToDoList().todos.length) {
-                return AddScreen(
-                  id: ToDoList().todos[widget.id].id,
-                  imagePath: ToDoList().todos[widget.id].imagePath,
-                );
-              } else {
-                return AddScreen(id: ToDoList().todos.length);
-              }
-            },
+            builder: (context) => AddScreen(
+              userId: userId,
+              noteId: noteId,
+              title: title,
+              content: content,
+              imagePath: imagePath,
+              isDone: isDone,
+              isDeleted: isDeleted,
+              createdAt: createdAt,
+              updatedAt: updatedAt,
+            ),
           ),
         );
-        setState(() {
-          _borderColor = Colors.grey;
-          _borderWidth = 1;
-        });
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 8.0), // Khoảng cách giữa các ToDoNode
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: _borderColor,
-              width: _borderWidth,
-            ),
+            border: Border.all(color: Colors.grey, width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (widget.imagePath !=
-                  null) // Kiểm tra xem imagePath có giá trị không
+              if (imagePath != null)
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  child: Image.asset(widget.imagePath!),
+                  child: Image.asset(imagePath!),
                 ),
-              if (widget.contentNode != null || widget.titleNode != null)
-                ListTile(
-                  title: widget.titleNode != null
-                      ? Text(
-                          '${widget.titleNode}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : null,
-                  subtitle: widget.contentNode != null
-                      ? Text(
-                          '${widget.contentNode}',
-                          maxLines: 10,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                        )
-                      : null,
+              ListTile(
+                title: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                subtitle: Text(
+                  content,
+                  maxLines: 10,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
             ],
           ),
         ),

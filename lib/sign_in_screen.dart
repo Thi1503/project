@@ -1,8 +1,8 @@
-import 'package:do_an_1/home.dart';
-import 'package:do_an_1/sign_out_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:do_an_1/home.dart'; // Import Home screen
+import 'package:do_an_1/sign_up_screen.dart';
 import 'package:do_an_1/database/database_helper.dart';
-import 'package:do_an_1/database/user.dart'; // Thay thế your_app bằng tên gói của bạn
+import 'package:do_an_1/database/user.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -16,6 +16,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isObscure = true;
+  int? _userId; // Định nghĩa biến userId để lưu trữ giá trị userId
 
   final DatabaseHelper dbHelper = DatabaseHelper();
 
@@ -57,19 +58,19 @@ class _SignInScreenState extends State<SignInScreen> {
                           fontSize: 16,
                           color: Colors.black,
                         ),
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.email),
-                          contentPadding: const EdgeInsets.symmetric(
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
                           hintText: 'Email',
                           hintStyle: TextStyle(color: Colors.grey),
-                          border: const OutlineInputBorder(
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.black,
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                         ),
                       ),
@@ -99,7 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -151,32 +152,56 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  bool isLoggedIn = await dbHelper.checkLogin(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
-
-                  if (isLoggedIn) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                  // Kiểm tra xem email hoặc password có trống không
+                  if (_emailController.text.isEmpty ||
+                      _passwordController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text('Vui lòng nhập email và mật khẩu')),
                     );
                   } else {
-                    // Xử lý thông báo khi đăng nhập thất bại
+                    bool isLoggedIn = await dbHelper.checkLogin(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+
+                    if (isLoggedIn) {
+                      // Lấy user_id từ cơ sở dữ liệu
+                      _userId = await dbHelper
+                          .getUserIdByEmail(_emailController.text);
+                      if (_userId != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Home(userId: _userId!)),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Không tìm thấy user_id cho email này')),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                'Tài khoản mật khẩu không đúng hoặc không tồn tại')),
+                      );
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Màu nền của button
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: TextStyle(fontSize: 18),
                 ),
                 child: const Text(
                   'Đăng nhập',
                   style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],

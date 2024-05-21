@@ -2,7 +2,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'user.dart';
 import 'note.dart';
-import 'label.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -45,29 +44,12 @@ class DatabaseHelper {
         user_id INTEGER,
         title TEXT NOT NULL,
         content TEXT NOT NULL,
+        image_path TEXT,
         is_done BOOLEAN DEFAULT 0,
         is_deleted BOOLEAN DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES User(user_id)
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Label (
-        label_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        name TEXT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES User(user_id)
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Note_Label (
-        note_id INTEGER,
-        label_id INTEGER,
-        FOREIGN KEY (note_id) REFERENCES Note(note_id),
-        FOREIGN KEY (label_id) REFERENCES Label(label_id)
       )
     ''');
   }
@@ -115,78 +97,87 @@ class DatabaseHelper {
     return List.generate(maps.length, (i) => Note.fromMap(maps[i]));
   }
 
-  Future<int> updateNote(Note note) async {
+  Future<List<Map<String, dynamic>>> getNotesByUserId(int userId, {String? keyword}) async {
     final db = await database;
-    return await db.update(
-      'Note',
+
+    // Check if keyword is provided
+    if (keyword == null || keyword.isEmpty) {
+      // If no keyword, query by user ID only
+      return await db.query(
+        'Note',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+      );
+    } else {
+      // If keyword is provided, query by user ID and keyword
+      return await db.query(
+        'Note',
+        where: 'user_id = ? AND (title LIKE ? OR content LIKE ?)',
+        whereArgs: [userId, '%$keyword%', '%$keyword%'],
+      );
+    }
+  }
+
+
+
+  Future<void> updateNote(Note note) async {
+    final db = await database;
+    await db.update(
+      'Note', // Sửa thành 'Note'
       note.toMap(),
-      where: 'note_id = ?',
-      whereArgs: [note.noteId],
+      where:
+          'user_id = ? AND note_id = ?', // Thay 'userId' thành 'user_id' và 'noteId' thành 'note_id'
+      whereArgs: [note.userId, note.noteId],
     );
   }
 
-  Future<int> deleteNote(int id) async {
+  Future<void> deleteNote(int userId, int noteId) async {
     final db = await database;
-    return await db.delete(
+    await db.delete(
       'Note',
-      where: 'note_id = ?',
-      whereArgs: [id],
+      where: 'user_id = ? AND note_id = ?',
+      whereArgs: [userId, noteId],
     );
   }
 
-  // Label methods
-  Future<int> insertLabel(Label label) async {
-    final db = await database;
-    return await db.insert('Label', label.toMap());
+  Future<int?> getUserIdByEmail(String email) async {
+    try {
+      final db = await database;
+      List<Map<String, dynamic>> results = await db.query(
+        'User',
+        columns: ['user_id'], // Thay 'id' thành 'user_id'
+        where: 'email = ?',
+        whereArgs: [email],
+      );
+      if (results.isNotEmpty) {
+        return results.first['user_id']; // Thay 'id' thành 'user_id'
+      } else {
+        return null; // Không tìm thấy email trong cơ sở dữ liệu
+      }
+    } catch (ex) {
+      print('Error: $ex');
+      return null;
+    }
   }
 
-  Future<List<Label>> getLabels() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('Label');
-    return List.generate(maps.length, (i) => Label.fromMap(maps[i]));
+  Future<int?> getMaxNoteIdByUserId(int userId) async {
+    try {
+      final db = await database;
+      List<Map<String, dynamic>> results = await db.rawQuery('''
+        SELECT MAX(note_id) AS max_id FROM Note WHERE user_id = ?
+      ''', [userId]);
+
+      // Lấy giá trị nodeID lớn nhất từ kết quả truy vấn
+      int? maxId = results.first['max_id'];
+
+      return maxId;
+    } catch (ex) {
+      print('Error: $ex');
+      return null;
+    }
   }
 
-  Future<int> updateLabel(Label label) async {
-    final db = await database;
-    return await db.update(
-      'Label',
-      label.toMap(),
-      where: 'label_id = ?',
-      whereArgs: [label.labelId],
-    );
-  }
 
-  Future<int> deleteLabel(int id) async {
-    final db = await database;
-    return await db.delete(
-      'Label',
-      where: 'label_id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  // Note_Label methods
-  Future<int> insertNoteLabel(int noteId, int labelId) async {
-    final db = await database;
-    return await db.insert('Note_Label', {
-      'note_id': noteId,
-      'label_id': labelId,
-    });
-  }
-
-  Future<List<Map<String, dynamic>>> getNoteLabels() async {
-    final db = await database;
-    return await db.query('Note_Label');
-  }
-
-  Future<int> deleteNoteLabel(int noteId, int labelId) async {
-    final db = await database;
-    return await db.delete(
-      'Note_Label',
-      where: 'note_id = ? AND label_id = ?',
-      whereArgs: [noteId, labelId],
-    );
-  }
 
   Future<bool> checkLogin(String username, String password) async {
     final db = await database;

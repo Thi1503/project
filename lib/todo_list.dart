@@ -7,7 +7,7 @@ class ToDo {
   String? imagePath;
   String? titleNode;
   String? contentNode;
-  //bool isDone;
+  // bool isDone;
 
   ToDo(
       {required this.id,

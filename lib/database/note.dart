@@ -3,6 +3,7 @@ class Note {
   int userId;
   String title;
   String content;
+  String? imagePath;
   bool isDone;
   bool isDeleted;
   DateTime? createdAt;
@@ -13,6 +14,7 @@ class Note {
     required this.userId,
     required this.title,
     required this.content,
+    this.imagePath,
     this.isDone = false,
     this.isDeleted = false,
     this.createdAt,
@@ -26,7 +28,7 @@ class Note {
       'user_id': userId,
       'title': title,
       'content': content,
-      'is_archived': isDone ? 1 : 0,
+      'is_done': isDone ? 1 : 0,
       'is_deleted': isDeleted ? 1 : 0,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
@@ -40,6 +42,7 @@ class Note {
       userId: map['user_id'],
       title: map['title'],
       content: map['content'],
+      imagePath: map['image_path'],
       isDone: map['is_archived'] == 1,
       isDeleted: map['is_deleted'] == 1,
       createdAt: map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
