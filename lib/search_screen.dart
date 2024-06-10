@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:do_an_1/database/database_helper.dart';
 import 'package:do_an_1/todo_node.dart'; // Import NotesListScreen
 
 class SearchScreen extends StatefulWidget {
@@ -13,7 +12,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late TextEditingController _searchController;
-  final DatabaseHelper dbHelper = DatabaseHelper();
 
   @override
   void initState() {

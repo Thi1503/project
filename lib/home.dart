@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            title: const Text(
+            title: Text(
               'Lê Đình Thi',
               style: TextStyle(
                 fontSize: 20,
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.home,
               color: Colors.black,
             ),
@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.add, color: Colors.black),
+            leading: const Icon(Icons.add, color: Colors.black),
             title: const Text('Tạo ghi chú'),
             selected: _selectedIndex == 1,
             onTap: () {
@@ -109,7 +109,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.settings,
               color: Colors.black,
             ),
@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
             },
           ),
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.logout,
               color: Colors.black,
             ),

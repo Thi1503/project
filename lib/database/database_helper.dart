@@ -25,6 +25,7 @@ class DatabaseHelper {
       version: 1,
       onCreate: _onCreate,
     );
+
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -100,16 +101,16 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getNotesByUserId(int userId, {String? keyword}) async {
     final db = await database;
 
-    // Check if keyword is provided
+    // Kiểm tra nếu keyword được cung cấp
     if (keyword == null || keyword.isEmpty) {
-      // If no keyword, query by user ID only
+      // Nếu không có keyword, chỉ truy vấn theo user ID
       return await db.query(
         'Note',
         where: 'user_id = ?',
         whereArgs: [userId],
       );
     } else {
-      // If keyword is provided, query by user ID and keyword
+      // Nếu có keyword, truy vấn theo user ID và keyword
       return await db.query(
         'Note',
         where: 'user_id = ? AND (title LIKE ? OR content LIKE ?)',
@@ -117,6 +118,7 @@ class DatabaseHelper {
       );
     }
   }
+
 
 
 
