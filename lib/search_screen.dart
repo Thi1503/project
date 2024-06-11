@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:do_an_1/todo_node.dart'; // Đảm bảo import NotesListScreen
+
+import 'notes_list_screen.dart';
+
 
 class SearchScreen extends StatefulWidget {
   final int userId;

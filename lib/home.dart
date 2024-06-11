@@ -1,6 +1,6 @@
 import 'package:do_an_1/add_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:do_an_1/todo_node.dart';
+import 'notes_list_screen.dart';
 import 'search_screen.dart';
 import 'sign_in_screen.dart'; // Import NotesListScreen
 
@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-
+  bool isChoiceMode = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,13 +154,13 @@ class _HomeState extends State<Home> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.check_box_outlined,
-                    color: Colors.black,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: const Icon(
+                //     Icons.check_box_outlined,
+                //     color: Colors.black,
+                //   ),
+                // ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(

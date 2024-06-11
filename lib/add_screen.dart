@@ -177,8 +177,33 @@ class _AddScreenState extends State<AddScreen> {
           Expanded(
             child: IconButton(
               onPressed: () {
-                // Xử lý khi người dùng thêm hình ảnh
-                // Thêm mã xử lý ở đây
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Thêm hình ảnh'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(Icons.camera_alt_outlined),
+                            title: Text('Chụp ảnh'),
+                            onTap: () {
+                              // Handle camera option
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.image_outlined),
+                            title: Text('Chọn từ thư viện'),
+                            onTap: () {
+                              // Handle gallery option
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
               },
               icon: Icon(
                 Icons.image_outlined,
