@@ -8,7 +8,7 @@ class Home extends StatefulWidget {
   final int userId;
   final int? noteId;
 
-  const Home({Key? key, required this.userId,this.noteId}) : super(key: key);
+  const Home({Key? key, required this.userId, this.noteId}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -23,7 +23,9 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
       drawer: _buildDrawer(),
-      body: NotesListScreen(userId: widget.userId),
+      body: SafeArea(
+        child: NotesListScreen(userId: widget.userId),
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
@@ -35,7 +37,10 @@ class _HomeState extends State<Home> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SearchScreen(userId: widget.userId,)),
+            MaterialPageRoute(
+                builder: (context) => SearchScreen(
+                      userId: widget.userId,
+                    )),
           );
         },
         title: const Text(
@@ -104,7 +109,8 @@ class _HomeState extends State<Home> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddScreen(userId: widget.userId)),
+                MaterialPageRoute(
+                    builder: (context) => AddScreen(userId: widget.userId)),
               );
             },
           ),
@@ -113,7 +119,7 @@ class _HomeState extends State<Home> {
               Icons.settings,
               color: Colors.black,
             ),
-            title: const Text('Cài đặt'),
+            title: const Text('Cập nhật tài khoản'),
             selected: _selectedIndex == 2,
             onTap: () {
               // Handle settings
@@ -212,7 +218,8 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddScreen(userId: widget.userId)),
+                  MaterialPageRoute(
+                      builder: (context) => AddScreen(userId: widget.userId)),
                 );
               },
               shape: RoundedRectangleBorder(

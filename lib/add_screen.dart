@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:do_an_1/home.dart';
 import 'package:do_an_1/database/database_helper.dart';
 import 'package:do_an_1/database/note.dart';
+import 'package:intl/intl.dart';
 
 class AddScreen extends StatefulWidget {
   final int? noteId;
@@ -36,6 +37,7 @@ class _AddScreenState extends State<AddScreen> {
   late TextEditingController _titleController;
   late TextEditingController _contentController;
   DateTime now = DateTime.now();
+
   int? maxNoteId;
 
   @override
@@ -48,6 +50,11 @@ class _AddScreenState extends State<AddScreen> {
 
   Future<void> _loadMaxNoteId() async {
     maxNoteId = await dbHelper.getMaxNoteIdByUserId(widget.userId);
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm');
+    return formatter.format(dateTime);
   }
 
   @override
@@ -64,7 +71,7 @@ class _AddScreenState extends State<AddScreen> {
                 controller: _titleController,
                 maxLines: null,
                 style:
-                const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Tiêu đề',
@@ -122,7 +129,8 @@ class _AddScreenState extends State<AddScreen> {
                 await dbHelper.updateNote(note);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Home(userId: widget.userId)),
+                  MaterialPageRoute(
+                      builder: (context) => Home(userId: widget.userId)),
                 );
               } else {
                 // Ngược lại, đang tạo mới ghi chú
@@ -145,13 +153,12 @@ class _AddScreenState extends State<AddScreen> {
                 await dbHelper.insertNote(note);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Home(userId: widget.userId)),
+                  MaterialPageRoute(
+                      builder: (context) => Home(userId: widget.userId)),
                 );
               }
-
-
             },
-            child: Text(
+            child: const Text(
               'Lưu',
               style: TextStyle(fontSize: 20, color: Colors.blue),
             ),
@@ -162,8 +169,7 @@ class _AddScreenState extends State<AddScreen> {
   }
 
   BottomAppBar _buildBottomAppBar(BuildContext context) {
-    TimeOfDay now = TimeOfDay.now();
-    String formattedTime = now.format(context);
+    String formattedDateTime = formatDateTime(now);
 
     return BottomAppBar(
       child: Row(
@@ -171,7 +177,7 @@ class _AddScreenState extends State<AddScreen> {
           Expanded(
             child: IconButton(
               onPressed: () {
-                // Xử lý khi người dùng chin thêm hình ảnh
+                // Xử lý khi người dùng thêm hình ảnh
                 // Thêm mã xử lý ở đây
               },
               icon: Icon(
@@ -185,7 +191,7 @@ class _AddScreenState extends State<AddScreen> {
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                'Đã chỉnh sửa $formattedTime',
+                'Đã chỉnh sửa $formattedDateTime',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -197,24 +203,29 @@ class _AddScreenState extends State<AddScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Xác nhận xóa'),
-                      content: Text('Bạn có chắc chắn muốn xóa ghi chú này không?'),
+                      title: const Text('Xác nhận xóa'),
+                      content: const Text(
+                          'Bạn có chắc chắn muốn xóa ghi chú này không?'),
                       actions: [
                         TextButton(
-                          child: Text('Huỷ'),
+                          child: const Text('Huỷ'),
                           onPressed: () {
-                            Navigator.of(context).pop(); // Đóng hộp thoại mà không làm gì thêm
+                            Navigator.of(context)
+                                .pop(); // Đóng hộp thoại mà không làm gì thêm
                           },
                         ),
                         TextButton(
-                          child: Text('Xóa'),
+                          child: const Text('Xóa'),
                           onPressed: () async {
                             if (widget.noteId != null) {
                               // Nếu noteId không null, có nghĩa là đang chỉnh sửa ghi chú
-                              await dbHelper.deleteNote(widget.userId, widget.noteId!);
+                              await dbHelper.deleteNote(
+                                  widget.userId, widget.noteId!);
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => Home(userId: widget.userId)),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Home(userId: widget.userId)),
                               );
                             }
                           },
@@ -224,13 +235,12 @@ class _AddScreenState extends State<AddScreen> {
                   },
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete_outline,
-                color: Colors.black,
+                color: Colors.red,
               ),
             ),
           ),
-
         ],
       ),
     );

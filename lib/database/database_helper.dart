@@ -25,7 +25,6 @@ class DatabaseHelper {
       version: 1,
       onCreate: _onCreate,
     );
-
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -100,35 +99,35 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getNotesByUserId(int userId, {String? keyword}) async {
     final db = await database;
+    List<Map<String, dynamic>> result;
 
     // Kiểm tra nếu keyword được cung cấp
     if (keyword == null || keyword.isEmpty) {
       // Nếu không có keyword, chỉ truy vấn theo user ID
-      return await db.query(
+      result = await db.query(
         'Note',
         where: 'user_id = ?',
         whereArgs: [userId],
       );
     } else {
       // Nếu có keyword, truy vấn theo user ID và keyword
-      return await db.query(
+      result = await db.query(
         'Note',
         where: 'user_id = ? AND (title LIKE ? OR content LIKE ?)',
         whereArgs: [userId, '%$keyword%', '%$keyword%'],
       );
     }
+
+    print('Query result: $result');  // Thêm câu lệnh print để kiểm tra kết quả
+    return result;
   }
-
-
-
 
   Future<void> updateNote(Note note) async {
     final db = await database;
     await db.update(
       'Note', // Sửa thành 'Note'
       note.toMap(),
-      where:
-          'user_id = ? AND note_id = ?', // Thay 'userId' thành 'user_id' và 'noteId' thành 'note_id'
+      where: 'user_id = ? AND note_id = ?', // Thay 'userId' thành 'user_id' và 'noteId' thành 'note_id'
       whereArgs: [note.userId, note.noteId],
     );
   }
@@ -169,7 +168,7 @@ class DatabaseHelper {
         SELECT MAX(note_id) AS max_id FROM Note WHERE user_id = ?
       ''', [userId]);
 
-      // Lấy giá trị nodeID lớn nhất từ kết quả truy vấn
+      // Lấy giá trị note_id lớn nhất từ kết quả truy vấn
       int? maxId = results.first['max_id'];
 
       return maxId;
@@ -178,8 +177,6 @@ class DatabaseHelper {
       return null;
     }
   }
-
-
 
   Future<bool> checkLogin(String username, String password) async {
     final db = await database;

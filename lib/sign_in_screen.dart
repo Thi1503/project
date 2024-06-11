@@ -59,10 +59,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Colors.black,
                         ),
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: Icon(Icons.account_circle),
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
-                          hintText: 'Email',
+                          hintText: 'Tên đăng nhập',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(

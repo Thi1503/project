@@ -59,10 +59,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Colors.black,
                         ),
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
+                          prefixIcon: Icon(Icons.account_box_outlined),
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
-                          hintText: 'Tên đăng nhập',
+                          hintText: 'Tên người dùng',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -88,10 +88,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: Colors.black,
                         ),
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: Icon(Icons.account_circle),
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),
-                          hintText: 'Email',
+                          hintText: 'Tên đăng nhập',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(

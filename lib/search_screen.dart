@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:do_an_1/todo_node.dart'; // Import NotesListScreen
+import 'package:do_an_1/todo_node.dart'; // Đảm bảo import NotesListScreen
 
 class SearchScreen extends StatefulWidget {
   final int userId;
@@ -17,22 +17,24 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _searchController.addListener(() {
-      // Cập nhật giá trị của searchKeyword mỗi khi TextField thay đổi
-      setState(() {
-        searchKeyword = _searchController.text.trim();
-      });
-    });
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    // Giải phóng bộ nhớ khi không cần thiết
     _searchController.dispose();
     super.dispose();
   }
 
-  String searchKeyword = ''; // Khởi tạo searchKeyword ở đây
+  void _onSearchChanged() {
+    print('Keyword: ${_searchController.text.trim()}');
+    setState(() {
+      searchKeyword = _searchController.text.trim();
+      print('$searchKeyword');
+    });
+  }
+
+  String searchKeyword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: NotesListScreen(
         userId: widget.userId,
-        searchKeyword: searchKeyword, // Truyền searchKeyword đã cập nhật vào NotesListScreen
+        searchKeyword: searchKeyword,
       ),
     );
   }
