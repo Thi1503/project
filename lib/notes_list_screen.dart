@@ -7,10 +7,10 @@ import 'note_widget.dart';
 class NotesListScreen extends StatefulWidget {
   final int userId;
   final String? searchKeyword;
-  final bool? isChoiceMode;
+
 
   const NotesListScreen(
-      {Key? key, required this.userId, this.searchKeyword, this.isChoiceMode})
+      {Key? key, required this.userId, this.searchKeyword})
       : super(key: key);
 
   @override
@@ -98,7 +98,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 isChoiceMode = false;
               });
             },
-            child: Text(
+            child: const Text(
               'Xong',
               style: TextStyle(fontSize: 20, color: Colors.blue),
             ))

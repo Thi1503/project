@@ -108,7 +108,7 @@ class _NoteWidgetState extends State<NoteWidget> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey, width: 1),
+                  border: Border.all(color: Colors.grey, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

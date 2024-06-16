@@ -8,6 +8,7 @@ class Home extends StatefulWidget {
   final int userId;
   final int? noteId;
 
+
   const Home({Key? key, required this.userId, this.noteId}) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
       drawer: _buildDrawer(),
@@ -68,78 +70,80 @@ class _HomeState extends State<Home> {
 
   Drawer _buildDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          Container(),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/violet.jpg',
-                  fit: BoxFit.cover,
-                  width: 40,
-                  height: 40,
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/violet.jpg',
+                    fit: BoxFit.cover,
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ),
+              title: Text(
+                'Lê Đình Thi',
+                style: TextStyle(
+                  fontSize: 20,
                 ),
               ),
             ),
-            title: Text(
-              'Lê Đình Thi',
-              style: TextStyle(
-                fontSize: 20,
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+                color: Colors.black,
               ),
+              title: const Text('Home'),
+              selected: _selectedIndex == 0,
+              onTap: () {
+                Navigator.pop(context); // Close drawer
+              },
             ),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.home,
-              color: Colors.black,
+            ListTile(
+              leading: const Icon(Icons.add, color: Colors.black),
+              title: const Text('Tạo ghi chú'),
+              selected: _selectedIndex == 1,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddScreen(userId: widget.userId)),
+                );
+              },
             ),
-            title: const Text('Home'),
-            selected: _selectedIndex == 0,
-            onTap: () {
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.add, color: Colors.black),
-            title: const Text('Tạo ghi chú'),
-            selected: _selectedIndex == 1,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddScreen(userId: widget.userId)),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-              color: Colors.black,
+            ListTile(
+              leading: const Icon(
+                Icons.settings,
+                color: Colors.black,
+              ),
+              title: const Text('Cập nhật tài khoản'),
+              selected: _selectedIndex == 2,
+              onTap: () {
+                // Handle settings
+              },
             ),
-            title: const Text('Cập nhật tài khoản'),
-            selected: _selectedIndex == 2,
-            onTap: () {
-              // Handle settings
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.logout,
-              color: Colors.black,
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.black,
+              ),
+              title: const Text('Đăng xuất'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                );
+              },
             ),
-            title: const Text('Đăng xuất'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignInScreen()),
-              );
-            },
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 

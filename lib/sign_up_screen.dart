@@ -17,7 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-  TextEditingController();
+      TextEditingController();
   bool _isObscure = true;
   bool _isObscure2 = true;
 
@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                         ),
                       ),
@@ -99,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                         ),
                       ),
@@ -129,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -169,7 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 5.0,
                             ),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure2
@@ -195,11 +195,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _passwordController.text.isEmpty ||
                       _confirmPasswordController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
+                      const SnackBar(
+                          content: Text('Vui lòng điền đầy đủ thông tin')),
                     );
                   } else {
                     bool isRegistered =
-                    await dbHelper.checkSignUp(_emailController.text);
+                        await dbHelper.checkSignUp(_emailController.text);
                     if (isRegistered) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Email đã được sử dụng')),
@@ -233,7 +234,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 child: const Text(
