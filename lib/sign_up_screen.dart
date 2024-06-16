@@ -53,26 +53,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: TextField(
-                        controller: _usernameController,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.account_box_outlined),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Tên người dùng',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                          controller: _usernameController,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
-                        ),
+                          decoration: InputDecoration(
+                            labelText: 'Tên người dùng',
+                            border: const OutlineInputBorder(),
+                          )
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -87,21 +76,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontSize: 16,
                           color: Colors.black,
                         ),
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Tên đăng nhập',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                        ),
+                          decoration: InputDecoration(
+                            labelText: 'Tên đăng nhập',
+                            border: const OutlineInputBorder(),
+                          )
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -118,23 +96,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         obscureText: _isObscure,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Mật khẩu',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
+                          labelText: 'Mật khẩu',
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
-                            icon: Icon(_isObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                            icon: Icon(
+                              _isObscure ? Icons.visibility : Icons.visibility_off,
+                            ),
                             onPressed: () {
                               setState(() {
                                 _isObscure = !_isObscure;
@@ -158,26 +125,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         obscureText: _isObscure2,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Nhập lại mật khẩu',
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
+                          labelText: 'Nhập lại mật khẩu',
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
-                            icon: Icon(_isObscure2
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                            icon: Icon(
+                              _isObscure ? Icons.visibility : Icons.visibility_off,
+                            ),
                             onPressed: () {
                               setState(() {
-                                _isObscure2 = !_isObscure2;
+                                _isObscure = !_isObscure;
                               });
                             },
                           ),
@@ -233,10 +189,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(),
                   backgroundColor: Colors.blue,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  textStyle: const TextStyle(fontSize: 18),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: TextStyle(fontSize: 18),
                 ),
                 child: const Text(
                   'Đăng ký',

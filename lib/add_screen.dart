@@ -39,6 +39,7 @@ class _AddScreenState extends State<AddScreen> {
   DateTime now = DateTime.now();
 
   int? maxNoteId;
+  late bool isDoneState;
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _AddScreenState extends State<AddScreen> {
     _titleController = TextEditingController(text: widget.title);
     _contentController = TextEditingController(text: widget.content);
     _loadMaxNoteId();
+    isDoneState = widget.isDone;
   }
 
   Future<void> _loadMaxNoteId() async {
@@ -70,8 +72,7 @@ class _AddScreenState extends State<AddScreen> {
               TextField(
                 controller: _titleController,
                 maxLines: null,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Tiêu đề',
@@ -120,7 +121,7 @@ class _AddScreenState extends State<AddScreen> {
                   noteId: widget.noteId,
                   title: title,
                   content: content,
-                  isDone: widget.isDone,
+                  isDone: isDoneState,
                   isDeleted: widget.isDeleted,
                   createdAt: widget.createdAt,
                   updatedAt: now, // Cập nhật thời gian mới
@@ -144,7 +145,7 @@ class _AddScreenState extends State<AddScreen> {
                   noteId: noteId,
                   title: title,
                   content: content,
-                  isDone: false,
+                  isDone: isDoneState,
                   isDeleted: false,
                   createdAt: now,
                   updatedAt: now,
@@ -174,6 +175,17 @@ class _AddScreenState extends State<AddScreen> {
     return BottomAppBar(
       child: Row(
         children: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isDoneState = !isDoneState;
+              });
+            },
+            icon: Icon(
+              isDoneState ? Icons.check_box : Icons.check_box_outline_blank,
+              color: isDoneState ? Colors.green : Colors.black,
+            ),
+          ),
           Expanded(
             child: IconButton(
               onPressed: () {

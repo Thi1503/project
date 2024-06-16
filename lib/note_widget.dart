@@ -71,11 +71,12 @@ class _NoteWidgetState extends State<NoteWidget> {
         if (widget.isChoiceMode)
           Expanded(
             flex: 1,
-            child: TextButton(
+            child: IconButton(
               onPressed: _toggleDone,
-              child: widget.isDone
-                  ? Icon(Icons.check_box_outlined)
-                  : Icon(Icons.check_box_outline_blank),
+              icon: Icon(
+                widget.isDone ? Icons.check_box : Icons.check_box_outline_blank,
+                color: widget.isDone ? Colors.green : Colors.black,
+              ),
             ),
           ),
         Expanded(

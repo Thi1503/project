@@ -161,6 +161,38 @@ class DatabaseHelper {
     }
   }
 
+  Future<String?> getUserNameByUserID(int userId) async {
+    final db = await database;
+    List<Map<String, dynamic>> results = await db.query(
+      'User',
+      columns: ['username'],
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first['username'] as String?;
+    } else {
+      return null; // Không tìm thấy user với user_id tương ứng
+    }
+  }
+  Future<User?> getUserByUserId(int userId) async {
+    final db = await database;
+    List<Map<String, dynamic>> results = await db.query(
+      'User',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+
+    if (results.isNotEmpty) {
+      return User.fromMap(results.first);
+    } else {
+      return null; // Không tìm thấy user với user_id tương ứng
+    }
+  }
+
+
+
   Future<int?> getMaxNoteIdByUserId(int userId) async {
     try {
       final db = await database;

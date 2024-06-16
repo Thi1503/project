@@ -58,20 +58,10 @@ class _SignInScreenState extends State<SignInScreen> {
                           fontSize: 16,
                           color: Colors.black,
                         ),
+
                         decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle),
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Tên đăng nhập',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
+                          labelText: 'Tên đăng nhập',
+                          border: OutlineInputBorder(),
                         ),
                       ),
                     ),
@@ -89,23 +79,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         obscureText: _isObscure,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                          hintText: 'Mật khẩu',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 5.0,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                          ),
+                          labelText: 'Mật khẩu',
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
-                            icon: Icon(_isObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                            icon: Icon(
+                              _isObscure ? Icons.visibility : Icons.visibility_off,
+                            ),
                             onPressed: () {
                               setState(() {
                                 _isObscure = !_isObscure;
@@ -157,7 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       _passwordController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                          content: Text('Vui lòng nhập email và mật khẩu')),
+                          content: Text('Vui lòng nhập tên đăng nhập và mật khẩu')),
                     );
                   } else {
                     bool isLoggedIn = await dbHelper.checkLogin(
@@ -173,7 +152,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Home(userId: _userId!)),
+                              builder: (context) => Home(userId: _userId!,email: _emailController.text,)),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -192,6 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(),
                   backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   textStyle: TextStyle(fontSize: 18),

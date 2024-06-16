@@ -1,15 +1,16 @@
 import 'package:do_an_1/add_screen.dart';
+import 'package:do_an_1/update_screen.dart';
 import 'package:flutter/material.dart';
+import 'database/database_helper.dart';
 import 'notes_list_screen.dart';
 import 'search_screen.dart';
-import 'sign_in_screen.dart'; // Import NotesListScreen
+import 'sign_in_screen.dart';
 
 class Home extends StatefulWidget {
   final int userId;
   final int? noteId;
-
-
-  const Home({Key? key, required this.userId, this.noteId}) : super(key: key);
+  final String? email;
+  const Home({Key? key, required this.userId, this.noteId, this.email,}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -18,13 +19,31 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   bool isChoiceMode = false;
+  String? userName;
+
+  final DatabaseHelper dbHelper = DatabaseHelper();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final fetchedUserName = await dbHelper.getUserNameByUserID(widget.userId);
+
+    setState(() {
+      userName = fetchedUserName;
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
-      drawer: _buildDrawer(),
+      drawer: _buildDrawer(context),
       body: SafeArea(
         child: NotesListScreen(userId: widget.userId),
       ),
@@ -41,8 +60,8 @@ class _HomeState extends State<Home> {
             context,
             MaterialPageRoute(
                 builder: (context) => SearchScreen(
-                      userId: widget.userId,
-                    )),
+                  userId: widget.userId,
+                )),
           );
         },
         title: const Text(
@@ -68,84 +87,89 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Drawer _buildDrawer() {
+  Drawer _buildDrawer(BuildContext context) {
     return Drawer(
-      child: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: ClipOval(
-                  child: Image.asset(
-                    'assets/violet.jpg',
-                    fit: BoxFit.cover,
-                    width: 40,
-                    height: 40,
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              Container(),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/violet.jpg',
+                      fit: BoxFit.cover,
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  userName ?? 'Đang tải...', // Hiển thị tên người dùng hoặc "Đang tải..." nếu chưa có tên
+                  style: TextStyle(
+                    fontSize: 20,
                   ),
                 ),
               ),
-              title: Text(
-                'Lê Đình Thi',
-                style: TextStyle(
-                  fontSize: 20,
+              ListTile(
+                leading: const Icon(
+                  Icons.home,
+                  color: Colors.black,
                 ),
+                title: const Text('Home'),
+                selected: _selectedIndex == 0,
+                onTap: () {
+                  Navigator.pop(context); // Close drawer
+                },
               ),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-                color: Colors.black,
+              ListTile(
+                leading: const Icon(Icons.add, color: Colors.black),
+                title: const Text('Tạo ghi chú'),
+                selected: _selectedIndex == 1,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddScreen(userId: widget.userId)),
+                  );
+                },
               ),
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {
-                Navigator.pop(context); // Close drawer
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.add, color: Colors.black),
-              title: const Text('Tạo ghi chú'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddScreen(userId: widget.userId)),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.settings,
-                color: Colors.black,
+              ListTile(
+                leading: const Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                ),
+                title: const Text('Cập nhật tài khoản'),
+                selected: _selectedIndex == 2,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateAccountScreen(userId: widget.userId,email: widget.email,)),
+                  );
+                },
               ),
-              title: const Text('Cập nhật tài khoản'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                // Handle settings
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.logout,
-                color: Colors.black,
+              ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.black,
+                ),
+                title: const Text('Đăng xuất'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                  );
+                },
               ),
-              title: const Text('Đăng xuất'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignInScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      )
+            ],
+          ),
+        )
     );
   }
+
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomAppBar(
@@ -158,13 +182,6 @@ class _HomeState extends State<Home> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // IconButton(
-                //   onPressed: () {},
-                //   icon: const Icon(
-                //     Icons.check_box_outlined,
-                //     color: Colors.black,
-                //   ),
-                // ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
