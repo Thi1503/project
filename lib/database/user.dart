@@ -3,14 +3,14 @@ class User {
   String? username;
   String? email;
   String? password;
-  DateTime? createdAt; // Thay đổi kiểu dữ liệu thành DateTime
+
 
   User({
     this.userId,
     this.username,
     this.email,
     this.password,
-    this.createdAt,
+
   });
 
   // Convert a User object into a Map object
@@ -20,7 +20,7 @@ class User {
       'username': username,
       'email': email,
       'password': password,
-      'created_at': createdAt?.toIso8601String(),
+
     };
   }
 
@@ -31,7 +31,7 @@ class User {
       username: map['username'],
       email: map['email'],
       password: map['password'],
-      createdAt: map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
+
     );
   }
 }

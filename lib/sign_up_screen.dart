@@ -129,11 +129,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isObscure ? Icons.visibility : Icons.visibility_off,
+                              _isObscure2 ? Icons.visibility : Icons.visibility_off,
                             ),
                             onPressed: () {
                               setState(() {
-                                _isObscure = !_isObscure;
+                                _isObscure2 = !_isObscure2;
                               });
                             },
                           ),
@@ -159,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         await dbHelper.checkSignUp(_emailController.text);
                     if (isRegistered) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Email đã được sử dụng')),
+                        const SnackBar(content: Text('Tên đăng nhập đã được sử dụng')),
                       );
                     } else {
                       if (_passwordController.text ==
@@ -171,8 +171,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           username: _usernameController.text,
                           email: _emailController.text,
                           password: _passwordController.text,
-                          // Sử dụng đối tượng DateTime đã tạo để gán cho createdAt
-                          createdAt: now,
                         );
                         await dbHelper.insertUser(user);
                         Navigator.push(

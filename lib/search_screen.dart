@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'notes_list_screen.dart';
-
 
 class SearchScreen extends StatefulWidget {
   final int userId;
@@ -14,6 +12,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late TextEditingController _searchController;
+  bool showNotes = false;
 
   @override
   void initState() {
@@ -29,14 +28,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onSearchChanged() {
-    print('Keyword: ${_searchController.text.trim()}');
     setState(() {
-      searchKeyword = _searchController.text.trim();
-      print('$searchKeyword');
+      showNotes = _searchController.text.trim().isNotEmpty;
     });
   }
-
-  String searchKeyword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +50,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: NotesListScreen(
+      body: showNotes
+          ? NotesListScreen(
         userId: widget.userId,
-        searchKeyword: searchKeyword,
-      ),
+        searchKeyword: _searchController.text.trim(),
+      )
+          : Container(), // không hiển thị ghi chú khi không có từ khóa tìm kiếm
     );
   }
 }
